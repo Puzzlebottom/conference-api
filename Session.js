@@ -1,1 +1,3 @@
-module.exports = session;
+export const makeNewSession = () => {
+
+}
