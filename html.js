@@ -1,5 +1,4 @@
-export const array = [];
-export const html = `<!DOCTYPE html>
+const pageTemplate = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,8 +8,8 @@ export const html = `<!DOCTYPE html>
         <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
-${JSON.stringify(array)}
 <div class="sessions-wrapper">
+    %sessions%
     <section class="session">
         <h2>Some session</h2>
         <ul>
@@ -50,3 +49,18 @@ ${JSON.stringify(array)}
 </form>
 </body>
 </html>`;
+
+
+const sessionTemplate = `<section class="session">
+    <h2>%title%</h2>
+</section>`;
+
+const renderSession = (session) => {
+    return sessionTemplate.replace('%title%', session.title);
+}
+
+export const renderPage = (sessions) => {
+    const renderedSessions = sessions.map(session => renderSession(session)).join('');
+
+    return pageTemplate.replace('%sessions%', renderedSessions);
+}

@@ -2,10 +2,9 @@ import express from "express"
 import path from "path"
 import moment from "moment"
 import bodyParser from "body-parser"
-import { html } from "./html.js"
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
-import {array} from "./html.js"
+import {renderPage} from "./html.js"
 
 const PORT = process.env.port || 5000;
 const app = express();
@@ -18,12 +17,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.listen(PORT, () => console.log(`server started on port ${PORT}`));
 
 app.get('/', (req, res) => {
-    res.send(html);
+    res.send(renderPage(sessions));
 });
+
+
+export const sessions = [];
 
 app.post('/sessions', (req, res) => {
     console.log(req.body);
-    array.push(req.body);
+    sessions.push(req.body);
     res.redirect('/');
 });
 
