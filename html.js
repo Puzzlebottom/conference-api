@@ -1,3 +1,4 @@
+export const array = [];
 export const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +9,7 @@ export const html = `<!DOCTYPE html>
         <link rel="stylesheet" href="css/style.css"/>
 </head>
 <body>
+${JSON.stringify(array)}
 <div class="sessions-wrapper">
     <section class="session">
         <h2>Some session</h2>
