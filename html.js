@@ -1,6 +1,4 @@
-exports html = html;
-
-const html = `<!DOCTYPE html>
+export const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">

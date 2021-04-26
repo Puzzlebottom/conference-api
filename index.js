@@ -1,12 +1,16 @@
-const express = require('express');
-const path = require('path');
-const moment = require('moment');
-const bodyParser = require('body-parser');
-
-const {html} = require('./html.js');
+import express from "express"
+import path from "path"
+import moment from "moment"
+import bodyParser from "body-parser"
+import {html} from "./html.js"
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
 
 const PORT = process.env.port || 5000;
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
