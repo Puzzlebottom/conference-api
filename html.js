@@ -10,24 +10,6 @@ const pageTemplate = `<!DOCTYPE html>
 <body>
 <div class="sessions-wrapper">
     %sessions%
-    <section class="session">
-        <h2>Some session</h2>
-        <ul>
-            <li><span>9:00 AM</span>Something 60m</li>
-            <li><span>10:00 AM</span>Something 15m</li>
-        </ul>
-        <h3>Duration: 1:15</h3>
-    </section>
-    <section class="session">
-        <h2>Another session</h2>
-        <ul>
-            <li><span>9:00 AM</span>Something 60m</li>
-            <li><span>10:00 AM</span>Something 15m</li>
-            <li><span>10:15 AM</span>Something 45m</li>
-            <li><span>11:00 AM</span>Something 15m</li>
-        </ul>
-        <h3>Duration: 1:15</h3>
-    </section>
 </div>
 
 <form method="post" action="/sessions">
@@ -53,7 +35,17 @@ const pageTemplate = `<!DOCTYPE html>
 
 const sessionTemplate = `<section class="session">
     <h2>%title%</h2>
+    <ul>
+    %talk%
+    </ul>
+    <h3>Duration: %duration%</h3>
 </section>`;
+
+const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
+
+export const assignSessionIndex = (talk) => {
+    return parseInt(talk.sessionIndex);
+}
 
 const renderSession = (session) => {
     return sessionTemplate.replace('%title%', session.title);

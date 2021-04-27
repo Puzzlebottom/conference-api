@@ -4,7 +4,8 @@ import moment from "moment"
 import bodyParser from "body-parser"
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
-import {renderPage} from "./html.js"
+import { renderPage } from "./html.js"
+import { assignSessionIndex } from "./html.js"
 
 const PORT = process.env.port || 5000;
 const app = express();
@@ -21,11 +22,18 @@ app.get('/', (req, res) => {
 });
 
 
-export const sessions = [];
+const sessions = [];
+const talks = []
 
 app.post('/sessions', (req, res) => {
     console.log(req.body);
     sessions.push(req.body);
     res.redirect('/');
 });
+
+app.post('/talks', (req, res) => {
+    console.log(req.body);
+    talks[assignSessionIndex(req.body)].push(req.body);
+    res.redirect('/');
+})
 
