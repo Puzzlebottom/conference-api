@@ -5,8 +5,9 @@ import bodyParser from "body-parser"
 import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 import { renderPage } from "./html.js"
-import { assignSessionIndex } from "./html.js"
 import { loggerMiddleware } from "./loggerMiddleware.js"
+import { Session } from "./Session.js"
+// import { Talk } from "./Talk.js"
 
 const PORT = process.env.port || 5000;
 const app = express();
@@ -23,17 +24,19 @@ app.get('/', (req, res) => {
 
 
 const sessions = [];
-const talks = []
 
 app.post('/sessions', (req, res) => {
-    console.log(req.body);
-    sessions.push(req.body);
+    // console.log(req.body);
+    const session = new Session(req.body);
+    sessions.push(session);
+    // console.log(sessions);
     res.redirect('/');
 });
 
-app.post('/talks', (req, res) => {
-    console.log(req.body);
-    talks[assignSessionIndex(req.body)].push(req.body);
-    res.redirect('/');
-})
+// app.post('/talks', (req, res) => {
+//     console.log(req.body);
+//     const talk = new Talk(req.body);
+//     sessions[parseInt(req.body.sessionIndex)].addTalk(talk);
+//     res.redirect('/');
+// })
 

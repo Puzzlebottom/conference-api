@@ -43,10 +43,6 @@ const sessionTemplate = `<section class="session">
 
 const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
 
-export const assignSessionIndex = (talk) => {
-    return parseInt(talk.sessionIndex);
-}
-
 const renderSession = (session) => {
     return sessionTemplate.replace('%title%', session.title);
 }
