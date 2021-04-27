@@ -13,6 +13,7 @@ const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
+app.use(loggerMiddleware);
 
 app.listen(PORT, () => console.log(`server started on port ${PORT}`));
 
