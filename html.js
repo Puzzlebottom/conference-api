@@ -1,3 +1,5 @@
+import { Session } from './Session.js'
+
 const pageTemplate = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,20 +25,18 @@ const pageTemplate = `<!DOCTYPE html>
     <h4>Add new track</h4>
     <label>Title: <input type="text" name="title"/></label>
     <label>Duration: <input type="number" name="duration"/></label>
-    <label>Session: <select name="sessionIndex">
-        <option value="1">Some session</option>
-        <option value="2">Another session</option>
+    <label>Session: <select name="sessionName">
+        %options%
     </select></label>
     <input type="submit" value="Save"/>
 </form>
 </body>
 </html>`;
 
-
 const sessionTemplate = `<section class="session">
     <h2>%title%</h2>
     <ul>
-    %talk%
+    %talk%  
     </ul>
     <h3>Duration: %duration%</h3>
 </section>`;
@@ -44,11 +44,21 @@ const sessionTemplate = `<section class="session">
 const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
 
 const renderSession = (session) => {
-    return sessionTemplate.replace('%title%', session.title);
+    if (session._talks.length === 0) {
+        return sessionTemplate.replace('%title%', session.getSessionTitle()).replace('%duration%', '0').replace('%talk%', '');
+    } else {
+        return sessionTemplate.replace('%title%', session.getSessionTitle()).replace('%duration%', session.getSessionDuration()).replace('%talk%', session.getSessionTalks());
+    }
 }
-
+const renderDropdownOptions = (session) => {
+    return session.getSessionDropdownOption();
+}
 export const renderPage = (sessions) => {
     const renderedSessions = sessions.map(session => renderSession(session)).join('');
-
-    return pageTemplate.replace('%sessions%', renderedSessions);
+    const renderedDropdownOptions = sessions.map(session => renderDropdownOptions(session)).join('');
+    if(sessions.length === 0) {
+        return pageTemplate.replace('%sessions%', '').replace('%options%', '');
+    } else {
+        return pageTemplate.replace('%sessions%', renderedSessions).replace('%options%', renderedDropdownOptions)
+    }
 }

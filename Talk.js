@@ -4,14 +4,28 @@ export class Talk {
     _assignedToSession;
     _talkStartTime;
 
-    constructor (title, duration, session) {
-        this._title = title;
-        this._duration = duration;
-        this._assignedToSession = session;
+    constructor (userInput) {
+        this._title = userInput.title;
+        this._duration = userInput.duration;
+        this._assignedToSession = getSessionId(userInput.sessionName);
         this._talkStartTime = getTalkStartTime();
     }
 
-    addTalk(talk) {
-        session
+    getTitle() {
+        return this._title
     }
+
+    getDuration() {
+        return this._duration
+    }
+
+    getSessionId() {
+        return this._assignedToSession
+    }
+
+    getTalkStartTime() {
+        return this._talkStartTime
+    }
+
+
 }
