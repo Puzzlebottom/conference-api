@@ -6,15 +6,15 @@ import { fileURLToPath } from 'url'
 import { dirname } from 'path'
 import { renderPage } from "./html.js"
 import { assignSessionIndex } from "./html.js"
+import { loggerMiddleware } from "./loggerMiddleware.js"
 
 const PORT = process.env.port || 5000;
 const app = express();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
+app.use(loggerMiddleware);
+
 app.listen(PORT, () => console.log(`server started on port ${PORT}`));
 
 app.get('/', (req, res) => {
