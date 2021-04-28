@@ -45,7 +45,7 @@ export class Session {
     getSessionTalks() {
         const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
         const mapTalksToTemplate = (talk) => {
-            return talkTemplate.replace('%timeOfTalk%', escape(talk.getTalkStartTime())).replace('%title%', escape(talk.getTitle()) + ' ' + escape(talk.getDuration()) + 'm')
+            return talkTemplate.replace('%timeOfTalk%', talk.getTalkStartTime()).replace('%title%', talk.getTitle()) + ' ' + talk.getDuration() + 'm';
         }
         return this._talks.map(talk => mapTalksToTemplate(talk)).join('')
     }
@@ -73,6 +73,6 @@ export class Session {
 
     formatDropDownTemplate() {
         const template = `<option value="%sessionId%">%title%</option>`
-        return template.replace('%sessionId%', escape(this._id)).replace('%title%', escape(this._title))
+        return template.replace('%sessionId%', this._id).replace('%title%', this._title);
     }
 }
