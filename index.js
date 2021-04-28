@@ -40,7 +40,10 @@ app.post('/sessions', (req, res) => {
 
 app.post('/talks', (req, res) => {
     const talk = new Talk(req.body);
-    sessions[getIndexById(talk._assignedToSession)]._talks.push(talk);
+    const session = sessions[getIndexById(talk._assignedToSession)];
+    talk.setTalkStartTime(session._nextAvailableTimeslot);
+    session._talks.push(talk);
+    session.updateSessionAttributes(talk._duration)
     res.redirect('/');
-});
+}); //move what logic you can into the class sheets
 

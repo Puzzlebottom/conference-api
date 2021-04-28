@@ -11,8 +11,8 @@ export class Session {
     _dropdown;
 
     constructor(userInput) {
-        this._title = userInput.title;
-        this._sessionStartTime = userInput.startTime;
+        this._title = userInput.title; //add a check to see if the name already exists.  append a bracketed counter to duplicate names
+        this._sessionStartTime = userInput.startTime; //add parsing function for 24hr clock, add AM PM
         this._id = uuidv4();
         this._talks = [];
         this._duration = 0
@@ -38,7 +38,6 @@ export class Session {
             return talkTemplate.replace('%timeOfTalk%', talk.getTalkStartTime()).replace('%title%', talk.getTitle() + ' ' + talk.getDuration() + 'm')
         }
         return this._talks.map(talk => mapTalksToTemplate(talk)).join('')
-        // const renderedSessions = sessions.map(session => renderSession(session)).join('')
     }
 
     getSessionDuration() {
@@ -49,23 +48,25 @@ export class Session {
         return this._dropdown;
     }
 
-    addTalk(talk) {
-        this._talks.push(talk)
-        this.updateDuration(talk._duration)
-        this.updateNextAvailableTimeslot(talk._duration)
+    updateSessionAttributes(minutes) {
+        this.updateDuration(minutes)
+        this.updateNextAvailableTimeslot(minutes)
     }
 
     updateDuration(minutes) {
-        this._duration = this._duration += minutes
+        if(this._duration > 60) {
+
+        }
+        //add parsing for hours & minutes
+        this._duration = this._duration += parseInt(minutes);
+    }
+
+    updateNextAvailableTimeslot(minutes) {
+        //add this._duration to the this._sessionStartTime and return timestamp as string
     }
 
     formatDropDownTemplate() {
         const template = `<option value="%sessionId%">%title%</option>`
         return template.replace('%sessionId%', this._id).replace('%title%', this._title)
     }
-
-
-    // updateNextAvailableTimeslot(minutes) {
-    //     this._nextAvailableTimeslot = this._nextAvailableTimeslot +=
-    // }
 }

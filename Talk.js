@@ -27,7 +27,7 @@ export class Talk {
         return this._talkStartTime
     }
 
-    setTalkStartTime() {
-        return
+    setTalkStartTime(time) {
+        this._talkStartTime = time
     }
 }
