@@ -25,7 +25,7 @@ const pageTemplate = `<!DOCTYPE html>
     <h4>Add new track</h4>
     <label>Title: <input type="text" name="title"/></label>
     <label>Duration: <input type="number" name="duration"/></label>
-    <label>Session: <select name="sessionName">
+    <label>Session: <select name="sessionId">
         %options%
     </select></label>
     <input type="submit" value="Save"/>
@@ -41,8 +41,6 @@ const sessionTemplate = `<section class="session">
     <h3>Duration: %duration%</h3>
 </section>`;
 
-const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
-
 const renderSession = (session) => {
     if (session._talks.length === 0) {
         return sessionTemplate.replace('%title%', session.getSessionTitle()).replace('%duration%', '0').replace('%talk%', '');
@@ -53,6 +51,7 @@ const renderSession = (session) => {
 const renderDropdownOptions = (session) => {
     return session.getSessionDropdownOption();
 }
+
 export const renderPage = (sessions) => {
     const renderedSessions = sessions.map(session => renderSession(session)).join('');
     const renderedDropdownOptions = sessions.map(session => renderDropdownOptions(session)).join('');

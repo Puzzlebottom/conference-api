@@ -7,8 +7,8 @@ export class Talk {
     constructor (userInput) {
         this._title = userInput.title;
         this._duration = userInput.duration;
-        this._assignedToSession = getSessionId(userInput.sessionName);
-        this._talkStartTime = getTalkStartTime();
+        this._assignedToSession = userInput.sessionId;
+        this._talkStartTime = "Test o'clock";
     }
 
     getTitle() {
@@ -27,5 +27,7 @@ export class Talk {
         return this._talkStartTime
     }
 
-
+    setTalkStartTime() {
+        return
+    }
 }
