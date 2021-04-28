@@ -1,6 +1,24 @@
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment"
 
+export const sessions = [];
+
+export const assignNewTalk = (userInput) => {
+    const talk = userInput
+    const session = sessions[getIndexById(talk._assignedToSession)];
+    talk.setTalkStartTime(session.getNextAvailableTimeslot());
+    session._talks.push(talk);
+    session.updateSessionAttributes(talk._duration)
+}
+
+const getIndexById = (searchId) => {
+    for(let i = 0; i < sessions.length; i += 1) {
+        if ((sessions[i]._id) === searchId) {
+            return i;
+        }
+    } return 'ERROR'
+}
+
 export class Session {
     _title;
     _sessionStartTime;

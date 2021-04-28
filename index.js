@@ -4,6 +4,8 @@ import { renderPage } from "./html.js"
 import { loggerMiddleware } from "./loggerMiddleware.js"
 import { Session } from "./Session.js"
 import { Talk } from "./Talk.js"
+import { sessions } from "./Session.js"
+import { assignNewTalk } from "./Session.js"
 
 const PORT = process.env.port || 5000;
 const app = express();
@@ -18,16 +20,6 @@ app.get('/', (req, res) => {
     res.send(renderPage(sessions));
 });
 
-const sessions = [];
-
-const getIndexById = (searchId) => {
-    for(let i = 0; i < sessions.length; i += 1) {
-        if ((sessions[i]._id) === searchId) {
-            return i;
-        }
-    } return 'ERROR'
-}
-
 app.post('/sessions', (req, res) => {
     const session = new Session(req.body);
     sessions.push(session);
@@ -36,10 +28,7 @@ app.post('/sessions', (req, res) => {
 
 app.post('/talks', (req, res) => {
     const talk = new Talk(req.body);
-    const session = sessions[getIndexById(talk._assignedToSession)];
-    talk.setTalkStartTime(session.getNextAvailableTimeslot());
-    session._talks.push(talk);
-    session.updateSessionAttributes(talk._duration)
+    assignNewTalk(talk);
     res.redirect('/');
-}); //move what logic you can into the class sheets
+});
 
