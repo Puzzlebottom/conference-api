@@ -1,9 +1,8 @@
 import express from "express"
-import path from "path"
-import moment from "moment"
+// import path from "path"
 import bodyParser from "body-parser"
-import { fileURLToPath } from 'url'
-import { dirname } from 'path'
+// import { fileURLToPath } from 'url'
+// import { dirname } from 'path'
 import { renderPage } from "./html.js"
 import { loggerMiddleware } from "./loggerMiddleware.js"
 import { Session } from "./Session.js"
@@ -41,7 +40,7 @@ app.post('/sessions', (req, res) => {
 app.post('/talks', (req, res) => {
     const talk = new Talk(req.body);
     const session = sessions[getIndexById(talk._assignedToSession)];
-    talk.setTalkStartTime(session._nextAvailableTimeslot);
+    talk.setTalkStartTime(session.getNextAvailableTimeslot());
     session._talks.push(talk);
     session.updateSessionAttributes(talk._duration)
     res.redirect('/');

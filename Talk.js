@@ -1,3 +1,5 @@
+import moment from "moment"
+
 export class Talk {
     _title;
     _duration;
@@ -8,7 +10,6 @@ export class Talk {
         this._title = userInput.title;
         this._duration = userInput.duration;
         this._assignedToSession = userInput.sessionId;
-        this._talkStartTime = "Test o'clock";
     }
 
     getTitle() {
@@ -19,15 +20,11 @@ export class Talk {
         return this._duration
     }
 
-    getSessionId() {
-        return this._assignedToSession
-    }
-
     getTalkStartTime() {
         return this._talkStartTime
     }
 
     setTalkStartTime(time) {
-        this._talkStartTime = time
+        this._talkStartTime = moment(time, 'hh:mm a').format('h:mm a');
     }
 }

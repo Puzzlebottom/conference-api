@@ -1,5 +1,3 @@
-import { Session } from './Session.js'
-
 const pageTemplate = `<!DOCTYPE html>
 <html lang="en">
 <head>

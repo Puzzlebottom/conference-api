@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Talk } from './Talk.js';
+import moment from "moment"
 
 export class Session {
     _title;
@@ -12,7 +12,7 @@ export class Session {
 
     constructor(userInput) {
         this._title = userInput.title; //add a check to see if the name already exists.  append a bracketed counter to duplicate names
-        this._sessionStartTime = userInput.startTime; //add parsing function for 24hr clock, add AM PM
+        this._sessionStartTime = userInput.startTime;
         this._id = uuidv4();
         this._talks = [];
         this._duration = 0
@@ -24,14 +24,6 @@ export class Session {
         return this._title;
     }
 
-    getSessionStartTime() {
-        return this._sessionStartTime;
-    }
-
-    getSessionId() {
-        return this._id;
-    }
-
     getSessionTalks() {
         const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
         const mapTalksToTemplate = (talk) => {
@@ -41,7 +33,15 @@ export class Session {
     }
 
     getSessionDuration() {
-        return this._duration;
+        if(this._duration < 60) {
+            return this._duration + ' min';
+        } else {
+            return Math.floor(this._duration/60) + ' h ' + (this._duration % 60) + ' min'
+        }
+    }
+
+    getNextAvailableTimeslot() {
+        return this._nextAvailableTimeslot
     }
 
     getSessionDropdownOption() {
@@ -49,20 +49,8 @@ export class Session {
     }
 
     updateSessionAttributes(minutes) {
-        this.updateDuration(minutes)
-        this.updateNextAvailableTimeslot(minutes)
-    }
-
-    updateDuration(minutes) {
-        if(this._duration > 60) {
-
-        }
-        //add parsing for hours & minutes
         this._duration = this._duration += parseInt(minutes);
-    }
-
-    updateNextAvailableTimeslot(minutes) {
-        //add this._duration to the this._sessionStartTime and return timestamp as string
+        this._nextAvailableTimeslot =  moment(this._nextAvailableTimeslot, 'hh:mm a').add(minutes, 'minutes').format('hh:mm a');
     }
 
     formatDropDownTemplate() {
