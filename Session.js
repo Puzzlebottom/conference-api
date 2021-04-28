@@ -45,7 +45,7 @@ export class Session {
     getSessionTalks() {
         const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
         const mapTalksToTemplate = (talk) => {
-            return talkTemplate.replace('%timeOfTalk%', talk.getTalkStartTime()).replace('%title%', talk.getTitle()) + ' ' + talk.getDuration() + 'm';
+            return talkTemplate.replace('%timeOfTalk%', talk.getTalkStartTime()).replace('%title%', talk.getTitle() + ' ' + talk.getDuration() + 'm');
         }
         return this._talks.map(talk => mapTalksToTemplate(talk)).join('')
     }
