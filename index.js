@@ -7,8 +7,13 @@ import { Talk } from "./Talk.js"
 import { sessions } from "./Session.js"
 import { assignNewTalk } from "./Session.js"
 
-const PORT = process.env.port || 5000;
 const app = express();
+
+let port = process.env.PORT;
+if (port == null || port == "") {
+    port = 8000;
+}
+app.listen(port);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
