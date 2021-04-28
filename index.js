@@ -1,8 +1,5 @@
 import express from "express"
-// import path from "path"
 import bodyParser from "body-parser"
-// import { fileURLToPath } from 'url'
-// import { dirname } from 'path'
 import { renderPage } from "./html.js"
 import { loggerMiddleware } from "./loggerMiddleware.js"
 import { Session } from "./Session.js"

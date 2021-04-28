@@ -40,12 +40,15 @@ const sessionTemplate = `<section class="session">
 </section>`;
 
 const renderSession = (session) => {
-    if (session._talks.length === 0) {
-        return sessionTemplate.replace('%title%', session.getSessionTitle()).replace('%duration%', '0').replace('%talk%', '');
-    } else {
-        return sessionTemplate.replace('%title%', session.getSessionTitle()).replace('%duration%', session.getSessionDuration()).replace('%talk%', session.getSessionTalks());
-    }
+    const noTalks = session._talks.length === 0;
+    const duration = noTalks ? '' : session.getSessionDuration();
+    const talks = noTalks ? '' : session.getSessionTalks();
+
+        return sessionTemplate.replace('%title%', session.getSessionTitle())
+            .replace('%duration%', duration)
+            .replace('%talk%', talks);
 }
+
 const renderDropdownOptions = (session) => {
     return session.getSessionDropdownOption();
 }
@@ -53,9 +56,10 @@ const renderDropdownOptions = (session) => {
 export const renderPage = (sessions) => {
     const renderedSessions = sessions.map(session => renderSession(session)).join('');
     const renderedDropdownOptions = sessions.map(session => renderDropdownOptions(session)).join('');
-    if(sessions.length === 0) {
-        return pageTemplate.replace('%sessions%', '').replace('%options%', '');
-    } else {
-        return pageTemplate.replace('%sessions%', renderedSessions).replace('%options%', renderedDropdownOptions)
-    }
+    const noSessions = sessions.length === 0;
+    const session = noSessions ? '' : renderedSessions;
+    const options = noSessions ? '' : renderedDropdownOptions;
+
+        return pageTemplate.replace('%sessions%', session)
+            .replace('%options%', options)
 }
