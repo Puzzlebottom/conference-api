@@ -25,6 +25,6 @@ export class Talk {
     }
 
     setTalkStartTime(time) {
-        this._talkStartTime = moment(time, 'hh:mm a').format('h:mm a');
+        this._talkStartTime = moment(time, 'hh:mm a').format('hh:mm a');
     }
 }
