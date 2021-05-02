@@ -1,22 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment"
+import { sessionRepository } from "./sessionRepository.js";
+import { talkRepository } from "./talkRepository.js";
 
-export const sessions = [];
-
-export const assignNewTalk = (userInput) => {
-    const talk = userInput
-    const session = sessions[getIndexById(talk._assignedToSession)];
+export const assignNewTalk = (talk) => {
+    const session = sessionRepository.findById(talk._assignedToSession);
     talk.setTalkStartTime(session.getNextAvailableTimeslot());
-    session._talks.push(talk);
+    talkRepository.save(talk._assignedToSession, talk);
     session.updateSessionAttributes(talk._duration)
-}
-
-const getIndexById = (searchId) => {
-    for(let i = 0; i < sessions.length; i += 1) {
-        if ((sessions[i]._id) === searchId) {
-            return i;
-        }
-    } return 'ERROR'
 }
 
 export class Session {
@@ -40,14 +31,6 @@ export class Session {
 
     getSessionTitle() {
         return this._title;
-    }
-
-    getSessionTalks() {
-        const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
-        const mapTalksToTemplate = (talk) => {
-            return talkTemplate.replace('%timeOfTalk%', talk.getTalkStartTime()).replace('%title%', talk.getTitle() + ' ' + talk.getDuration() + 'm');
-        }
-        return this._talks.map(talk => mapTalksToTemplate(talk)).join('')
     }
 
     getSessionDuration() {

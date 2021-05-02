@@ -1,3 +1,5 @@
+import { talkRepository } from "./talkRepository.js";
+
 const pageTemplate = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,13 +42,21 @@ const sessionTemplate = `<section class="session">
 </section>`;
 
 const renderSession = (session) => {
-    const noTalks = session._talks.length === 0;
+    const noTalks = talkRepository.findAllBySessionId(session._id).length === 0;
     const duration = noTalks ? '' : session.getSessionDuration();
-    const talks = noTalks ? '' : session.getSessionTalks();
-
+    const talks = noTalks ? '' : talkRepository.findAllBySessionId(session._id);
         return sessionTemplate.replace('%title%', session.getSessionTitle())
             .replace('%duration%', duration)
-            .replace('%talk%', talks);
+            .replace('%talk%', formatTalksIntoTemplate(talks));
+}
+
+const formatTalksIntoTemplate = (talks) => {
+    const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
+    const mapTalksToTemplate = (talk) => {
+        return talkTemplate.replace('%timeOfTalk%', talk.getStartTime())
+            .replace('%title%', talk.getTitle() + ' ' + talk.getDuration() + 'm');
+    };
+    return talks.map(talk => mapTalksToTemplate(talk)).join('')
 }
 
 const renderDropdownOptions = (session) => {
