@@ -44,16 +44,17 @@ const sessionTemplate = `<section class="session">
 const renderSession = (session) => {
     const noTalks = talkRepository.findAllBySessionId(session._id).length === 0;
     const duration = noTalks ? '' : session.getSessionDuration();
-    const talks = noTalks ? '' : talkRepository.findAllBySessionId(session._id);
-        return sessionTemplate.replace('%title%', session.getSessionTitle())
-            .replace('%duration%', duration)
-            .replace('%talk%', formatTalksIntoTemplate(talks));
+    const talks = noTalks ? '' : formatTalksIntoTemplate(talkRepository.findAllBySessionId(session._id));
+
+    return sessionTemplate.replace('%title%', session.getSessionTitle())
+        .replace('%duration%', duration)
+        .replace('%talk%', talks);
 }
 
 const formatTalksIntoTemplate = (talks) => {
     const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
     const mapTalksToTemplate = (talk) => {
-        return talkTemplate.replace('%timeOfTalk%', talk.getStartTime())
+        return talkTemplate.replace('%timeOfTalk%', talk.getTalkStartTime())
             .replace('%title%', talk.getTitle() + ' ' + talk.getDuration() + 'm');
     };
     return talks.map(talk => mapTalksToTemplate(talk)).join('')
