@@ -14,7 +14,6 @@ export class Session {
     _title;
     _sessionStartTime;
     _id;
-    _talks;
     _duration;
     _nextAvailableTimeslot;
     _dropdown;
@@ -23,7 +22,6 @@ export class Session {
         this._title = userInput.title; //add a check to see if the name already exists.  append a bracketed counter to duplicate names
         this._sessionStartTime = userInput.startTime;
         this._id = uuidv4();
-        this._talks = [];
         this._duration = 0
         this._nextAvailableTimeslot = this._sessionStartTime;
         this._dropdown = this.formatDropDownTemplate();

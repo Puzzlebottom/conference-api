@@ -1,6 +1,6 @@
 import express from "express"
 import bodyParser from "body-parser"
-import { renderPage } from "./html.js"
+import { renderPage } from "./templates.js"
 import { loggerMiddleware } from "./loggerMiddleware.js"
 import { Session } from "./Session.js"
 import { sessionRepository } from "./sessionRepository.js";
