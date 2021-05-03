@@ -10,21 +10,16 @@ const getIndexHtml = async () => {
   return cheerio.load(page);
 }
 
-const createSession = async (title, startTime) => {
-  const result = await request.post('/sessions')
+const post = async (uri, params) => {
+  const result = await request.post(uri)
     .type('application/x-www-form-urlencoded')
-    .send({title, startTime});
+    .send(params);
 
   expect(result.status).to.eq(302);
-};
+}
 
-const createTalk = async (title, duration, sessionId) => {
-  const result = await request.post('/talks')
-    .type('application/x-www-form-urlencoded')
-    .send({title, duration, sessionId});
-
-  expect(result.status).to.eq(302);
-};
+const createSession = async (title, startTime) => post('/sessions', {title, startTime});
+const createTalk = async (title, duration, sessionId) => post('/talks', {title, duration, sessionId});
 
 const getSessionIdFromIndex = async (dropdownIndex) => {
   const page = await getIndexHtml();
