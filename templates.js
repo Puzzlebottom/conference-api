@@ -1,4 +1,5 @@
 import { talkRepository } from "./talkRepository.js";
+import { getTotalDurationOfTalks } from "./Session.js";
 
 const pageTemplate = `<!DOCTYPE html>
 <html lang="en">
@@ -43,7 +44,7 @@ const sessionTemplate = `<section class="session">
 
 const renderSession = (session) => {
     const noTalks = talkRepository.findAllBySessionId(session._id).length === 0;
-    const duration = noTalks ? '' : session.getSessionDuration();
+    const duration = noTalks ? '' : getTotalDurationOfTalks(session._id);
     const talks = noTalks ? '' : formatTalksIntoTemplate(talkRepository.findAllBySessionId(session._id));
 
     return sessionTemplate.replace('%title%', session.getSessionTitle())

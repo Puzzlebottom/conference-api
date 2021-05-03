@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import moment from "moment"
+import { Talk } from "./Talk.js"
 import { sessionRepository } from "./sessionRepository.js";
 import { talkRepository } from "./talkRepository.js";
 
@@ -8,6 +9,34 @@ export const assignNewTalk = (talk) => {
     talk.setTalkStartTime(session.getNextAvailableTimeslot());
     talkRepository.save(talk._assignedToSession, talk);
     session.updateSessionAttributes(talk._duration)
+}
+
+export const getTotalDurationOfTalks = (sessionId) => {
+    const talks = talkRepository.findAllBySessionId(sessionId);
+    // const durations = talks.map(this.getDuration());
+
+    // const getDuration = (talk) => {return talk._duration};
+    // const durations = talks.map(getDuration());
+
+    // talks.map(console.log(this._duration));
+
+    // talks.map(console.log(Talk._duration));
+
+    // talks.map(console.log(Talk.getDuration()));
+
+    // talks.map(console.log(talk.getDuration()));
+
+    // talks.map(console.log(this.getDuration()));
+
+    return durations.reduce((a, b) => a + b, 0);
+}
+
+const getTalkStartTime = () => {
+
+}
+
+const getPriorTalks = () => {
+
 }
 
 export class Session {
