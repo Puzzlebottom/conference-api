@@ -8,6 +8,12 @@ export default {
       filename: 'postgres://app_dev:e1bc9e7f864d@localhost/app_dev'
     }
   },
+  test: {
+    client: 'sqlite3',
+    connection: {
+      filename: './test.sqlite3'
+    }
+  },
 
   staging: {
     client: 'postgresql',
