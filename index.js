@@ -5,7 +5,6 @@ import { loggerMiddleware } from "./loggerMiddleware.js"
 import { Session } from "./Session.js"
 import { sessionRepository } from "./sessionRepository.js";
 import { Talk } from "./Talk.js"
-import { assignNewTalk } from "./Session.js"
 import knexfile from "./knexfile.js";
 import knex from "knex";
 import { talkRepository } from "./talkRepository.js";
@@ -36,7 +35,7 @@ app.post('/sessions', (req, res) => {
 
 app.post('/talks', (req, res) => {
     const talk = new Talk(req.body);
-    assignNewTalk(talk);
+    talkRepository.save(talk._assignedToSession, talk);
     res.redirect('/');
 });
 

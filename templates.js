@@ -1,5 +1,4 @@
 import { talkRepository } from "./talkRepository.js";
-import { getTotalDurationOfTalks } from "./Session.js";
 
 const pageTemplate = `<!DOCTYPE html>
 <html lang="en">
@@ -44,7 +43,7 @@ const sessionTemplate = `<section class="session">
 
 const renderSession = (session) => {
     const noTalks = talkRepository.findAllBySessionId(session._id).length === 0;
-    const duration = noTalks ? '' : getTotalDurationOfTalks(session._id);
+    const duration = noTalks ? '' : session.formatDurationIntoHoursAndMinutes();
     const talks = noTalks ? '' : formatTalksIntoTemplate(talkRepository.findAllBySessionId(session._id));
 
     return sessionTemplate.replace('%title%', session.getSessionTitle())
@@ -55,7 +54,7 @@ const renderSession = (session) => {
 const formatTalksIntoTemplate = (talks) => {
     const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
     const mapTalksToTemplate = (talk) => {
-        return talkTemplate.replace('%timeOfTalk%', talk.getTalkStartTime())
+        return talkTemplate.replace('%timeOfTalk%', '' + talk.getTalkStartTime())
             .replace('%title%', talk.getTitle() + ' ' + talk.getDuration() + 'm');
     };
     return talks.map(talk => mapTalksToTemplate(talk)).join('')
