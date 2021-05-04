@@ -8,7 +8,7 @@ export class Talk {
 
     constructor (userInput) {
         this._title = userInput.title;
-        this._duration = userInput.duration;
+        this._duration = parseInt(userInput.duration);
         this._assignedToSession = userInput.sessionId;
     }
 

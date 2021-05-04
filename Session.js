@@ -13,14 +13,20 @@ export const assignNewTalk = (talk) => {
 
 export const getTotalDurationOfTalks = (sessionId) => {
     const talks = talkRepository.findAllBySessionId(sessionId);
-    // const durations = talks.map(this.getDuration());
+    //const durations = talks.map(this.getDuration());
 
-    // const getDuration = (talk) => {return talk._duration};
-    // const durations = talks.map(getDuration());
+    const getDuration = (talk) => {
+        return talk._duration
+    };
+    const durations = talks.map(getDuration);
+    //
+    // let total = 0;
+    // for (const talk of talks) {
+    //     total += talk.getDuration()
+    // }
+    // return total;
 
-    // talks.map(console.log(this._duration));
-
-    // talks.map(console.log(Talk._duration));
+    // talks.map( ujjconsole.log(Talk._duration));
 
     // talks.map(console.log(Talk.getDuration()));
 
@@ -61,10 +67,11 @@ export class Session {
     }
 
     getSessionDuration() {
-        if(this._duration < 60) {
-            return this._duration + ' min';
+        const duration = getTotalDurationOfTalks(this._id)
+        if(duration < 60) {
+            return duration + ' min';
         } else {
-            return Math.floor(this._duration/60) + ' h ' + (this._duration % 60) + ' min'
+            return Math.floor(duration/60) + ' h ' + (duration % 60) + ' min'
         }
     }
 
