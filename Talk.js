@@ -6,13 +6,13 @@ import {sessionRepository} from "./sessionRepository.js";
 export class Talk {
     _title;
     _duration;
-    _assignedToSession;
+    _sessionId;
     _talkId;
 
     constructor (newTalkData) {
         this._title = newTalkData.title;
         this._duration = parseInt(newTalkData.duration);
-        this._assignedToSession = newTalkData.sessionId;
+        this._sessionId = newTalkData.sessionId;
         this._talkId = uuidv4();
     }
 
@@ -26,19 +26,22 @@ export class Talk {
 
     getTalkStartTime() {
         const priorTalks = this.getPriorTalks();
-        const offsetByDuration = () => {
-            const getDuration = (talk) => {
-                return talk._duration
-            };
-            const durations = priorTalks.map(getDuration);
-            return durations.reduce((a, b) => a + b, 0);
-        }
-        const sessionStartTime = sessionRepository.findById(this._assignedToSession)._sessionStartTime;
-        return moment(sessionStartTime, 'h:mm a').add(offsetByDuration(), 'minutes').format('h:mm a');
+        const priorTalksDuration = priorTalks.reduce((partialSum, talk2) => talk2.getDuration(), 0);
+        // const offsetByDuration = () => {
+        //     const getDuration = (talk) => {
+        //         return talk._duration
+        //     };
+        //     const durations = priorTalks.map(getDuration);
+        //     return durations.reduce((a, b) => a + b, 0);
+        // }
+        const sessionStartTime = sessionRepository.findById(this._sessionId).getSessionStartTime();
+        return moment(sessionStartTime, 'h:mm a')
+            .add(priorTalksDuration, 'minutes')
+            .format('h:mm a');
     }
 
     getPriorTalks = () => {
-        const talks = talkRepository.findAllBySessionId(this._assignedToSession);
+        const talks = talkRepository.findAllBySessionId(this._sessionId);
         const thisIndex = talks.findIndex(talk => talk._talkId === this._talkId);
         return talks.slice(0, thisIndex);
     }

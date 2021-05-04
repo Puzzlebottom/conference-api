@@ -1,6 +1,16 @@
 import { v4 as uuidv4 } from 'uuid';
 import { talkRepository } from "./talkRepository.js";
 
+export const getTotalDurationOfTalks = (sessionId) => {
+    const talks = talkRepository.findAllBySessionId(sessionId);
+    const getDuration = (talk) => {
+        return talk._duration
+    };
+    const durations = talks.map(getDuration);
+    return durations.reduce((a, b) => a + b, 0);
+}
+
+
 export class Session {
     _title;
     _sessionStartTime;
@@ -18,17 +28,12 @@ export class Session {
         return this._title;
     }
 
-    getTotalDurationOfTalks(sessionId) {
-        const talks = talkRepository.findAllBySessionId(sessionId);
-        const getDuration = (talk) => {
-            return talk._duration
-        };
-        const durations = talks.map(getDuration);
-        return durations.reduce((a, b) => a + b, 0);
+    getSessionStartTime() {
+        return this._sessionStartTime;
     }
 
     formatDurationIntoHoursAndMinutes() {
-        const duration = this.getTotalDurationOfTalks(this._id)
+        const duration = getTotalDurationOfTalks(this._id);
         if(duration < 60) {
             return duration + ' min';
         } else {

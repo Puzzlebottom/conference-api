@@ -35,7 +35,7 @@ app.post('/sessions', (req, res) => {
 
 app.post('/talks', (req, res) => {
     const talk = new Talk(req.body);
-    talkRepository.save(talk._assignedToSession, talk);
+    talkRepository.save(talk._sessionId, talk);
     res.redirect('/');
 });
 
