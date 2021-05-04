@@ -4,9 +4,7 @@ export default {
 
   development: {
     client: 'pg',
-    connection: {
-      filename: 'postgres://app_dev:e1bc9e7f864d@localhost/app_dev'
-    }
+    connection: 'postgres://app_dev:e1bc9e7f864d@localhost:5433/app_dev'
   },
 
   staging: {
