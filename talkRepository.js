@@ -6,9 +6,9 @@ export const talkRepository = {
     save: async (talk) => {
         const formatTalkToDatabase = () => {
             const template = `INSERT INTO talks VALUES (DEFAULT, '%title%', '%duration%', '%sessionId%');`
-            return template.replace('%title%', talk._title)
-                .replace('%duration%', talk._duration)
-                .replace('%sessionId%', talk._sessionId);
+            return template.replace('%title%', talk.title)
+                .replace('%duration%', talk.duration)
+                .replace('%sessionId%', talk.sessionid);
         }
         await database.raw(formatTalkToDatabase(talk));
     },

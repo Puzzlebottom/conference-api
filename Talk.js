@@ -8,7 +8,6 @@ export class Talk {
     _duration;
     _sessionId;
 
-
     constructor (newTalkData) {
         this._talkId = parseInt(newTalkData.id);
         this._title = newTalkData.title;

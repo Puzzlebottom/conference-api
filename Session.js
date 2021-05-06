@@ -33,8 +33,8 @@ export class Session {
         return this._sessionStartTime;
     }
 
-    async getTalks() {
-        const result = await database.raw('SELECT * from talks');
+    getTalks() {
+        const result = async () => await database.raw('SELECT * from talks');
         return result.rows.map(row => new Talk(row));
 
     }
