@@ -1,4 +1,5 @@
 import { talkRepository } from "./talkRepository.js";
+import { sessionRepository } from "./sessionRepository.js";
 
 const pageTemplate = `<!DOCTYPE html>
 <html lang="en">
@@ -17,7 +18,7 @@ const pageTemplate = `<!DOCTYPE html>
 <form method="post" action="/sessions">
     <h4>Add new session</h4>
     <label>Title: <input type="text" name="title"/></label>
-    <label>Start time: <input type="time" name="startTime"/></label>
+    <label>Start time: <input type="time" name="starttime"/></label>
     <input type="submit" value="Save"/>
 </form>
 
@@ -25,7 +26,7 @@ const pageTemplate = `<!DOCTYPE html>
     <h4>Add new track</h4>
     <label>Title: <input type="text" name="title"/></label>
     <label>Duration: <input type="number" name="duration"/></label>
-    <label>Session: <select name="sessionId">
+    <label>Session: <select name="sessionid">
         %options%
     </select></label>
     <input type="submit" value="Save"/>
@@ -42,9 +43,9 @@ const sessionTemplate = `<section class="session">
 </section>`;
 
 const renderSession = (session) => {
-    const noTalks = talkRepository.findAllBySessionId(session._id).length === 0;
+    const noTalks = (talkRepository.findAllBySessionId(session._id)).rows.length === 0;
     const duration = noTalks ? '' : session.formatDurationIntoHoursAndMinutes();
-    const talks = noTalks ? '' : formatTalksIntoTemplate(talkRepository.findAllBySessionId(session._id));
+    const talks = noTalks ? '' : formatTalksIntoTemplate((talkRepository.findAllBySessionId(session._id)).rows);
 
     return sessionTemplate.replace('%title%', session.getSessionTitle())
         .replace('%duration%', duration)
