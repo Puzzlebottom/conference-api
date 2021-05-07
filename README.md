@@ -1,1 +1,0 @@
-docker exec -it conference-api_app-postgres_1 psql -U app_dev

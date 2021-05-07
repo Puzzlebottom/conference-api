@@ -1,6 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
 import { talkRepository } from "./talkRepository.js";
-import { database } from "./index.js"
-import {Talk} from "./Talk.js";
 
 export const getTotalDurationOfTalks = (sessionId) => {
     const talks = talkRepository.findAllBySessionId(sessionId);
@@ -13,15 +12,15 @@ export const getTotalDurationOfTalks = (sessionId) => {
 
 
 export class Session {
-    _id;
     _title;
     _sessionStartTime;
+    _id;
     _dropdown;
 
     constructor(newSessionData) {
-        this._id = newSessionData.id;
         this._title = newSessionData.title; //add a check to see if the name already exists.  append a bracketed counter to duplicate names
-        this._sessionStartTime = newSessionData.starttime;
+        this._sessionStartTime = newSessionData.startTime;
+        this._id = uuidv4();
         this._dropdown = this.formatDropDownTemplate();
     }
 
@@ -31,12 +30,6 @@ export class Session {
 
     getSessionStartTime() {
         return this._sessionStartTime;
-    }
-
-    async getTalks() {
-        const result = await database.raw('SELECT * from talks');
-        return result.rows.map(row => new Talk(row));
-
     }
 
     formatDurationIntoHoursAndMinutes() {

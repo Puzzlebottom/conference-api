@@ -9,7 +9,7 @@ import knexfile from "./knexfile.js";
 import knex from "knex";
 import { talkRepository } from "./talkRepository.js";
 const config = knexfile[process.env.NODE_ENV || "development"];
-export const database = knex(config);
+const database = knex(config);
 
 const app = express();
 
@@ -29,17 +29,13 @@ app.get('/', (req, res) => {
 
 app.post('/sessions', (req, res) => {
     const session = new Session(req.body);
-    sessionRepository.save(session)
+    sessionRepository.save(session);
     res.redirect('/');
 });
 
 app.post('/talks', (req, res) => {
     const talk = new Talk(req.body);
-    talkRepository.save(talk);
+    talkRepository.save(talk._sessionId, talk);
     res.redirect('/');
 });
-
-// const result = (await database.raw(`SELECT * FROM sessions;`)).rows;
-// console.log(result);
-
 
