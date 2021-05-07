@@ -2,7 +2,7 @@ const sessions = [];
 
 const getIndexById = (searchId) => {
     for(let i = 0; i < sessions.length; i += 1) {
-        if ((sessions[i]._id) === searchId) {
+        if ((sessions[i]._id) === parseInt(searchId)) {
             return i;
         }
     } return 'ERROR'

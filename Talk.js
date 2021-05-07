@@ -16,6 +16,10 @@ export class Talk {
         this._talkId = uuidv4();
     }
 
+    getSessionId() {
+        return this._sessionId;
+    }
+
     getTitle() {
         return this._title
     }

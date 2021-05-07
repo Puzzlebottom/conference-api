@@ -8,8 +8,6 @@ import { Talk } from "./Talk.js"
 import knexfile from "./knexfile.js";
 import knex from "knex";
 import { talkRepository } from "./talkRepository.js";
-const config = knexfile[process.env.NODE_ENV || "development"];
-const database = knex(config);
 
 const app = express();
 
@@ -33,9 +31,10 @@ app.post('/sessions', (req, res) => {
     res.redirect('/');
 });
 
-app.post('/talks', (req, res) => {
+app.post('/talks', async (req, res) => {
     const talk = new Talk(req.body);
-    talkRepository.save(talk._sessionId, talk);
+    await talkRepository.save(talk._sessionId, talk);
     res.redirect('/');
 });
 
+sessionRepository.save(new Session({title: 'foo', startTime: '10:10'}))

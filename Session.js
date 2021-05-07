@@ -10,6 +10,12 @@ export const getTotalDurationOfTalks = (sessionId) => {
     return durations.reduce((a, b) => a + b, 0);
 }
 
+let monotionicallyIncreasingIntValue = 0;
+const monotionicallyIncreasingInt = () => {
+    monotionicallyIncreasingIntValue += 1;
+    return monotionicallyIncreasingIntValue;
+}
+
 
 export class Session {
     _title;
@@ -20,7 +26,7 @@ export class Session {
     constructor(newSessionData) {
         this._title = newSessionData.title; //add a check to see if the name already exists.  append a bracketed counter to duplicate names
         this._sessionStartTime = newSessionData.startTime;
-        this._id = uuidv4();
+        this._id = monotionicallyIncreasingIntValue;
         this._dropdown = this.formatDropDownTemplate();
     }
 
