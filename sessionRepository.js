@@ -14,9 +14,10 @@ const getIndexById = (searchId) => {
 export const sessionRepository = {
     save: async (session) => {
         const formatSessionToDatabase = () => {
-            const template = `INSERT INTO sessions VALUES (DEFAULT, '%title%', '%sessionStartTime%');`
-            return template.replace('%title%', session.title)
-                .replace('%sessionStartTime%', session.starttime);
+            const template = `INSERT INTO sessions VALUES (DEFAULT, '%title%', '%sessionId%', '%sessionStartTime%');`
+            return template.replace('%title%', session._title)
+                .replace('%sessionId%', session._id)
+                .replace('%sessionStartTime%', session._sessionStartTime);
         }
         await database.raw(formatSessionToDatabase(session));
     },
@@ -26,13 +27,13 @@ export const sessionRepository = {
             const template = `SELECT * FROM sessions WHERE id = %sessionId%;`
             return template.replace('%sessionId%', sessionId)
             };
-        await database.raw(formatQuery(sessionId)).rows;
+        return (await database.raw(formatQuery(sessionId))).rows;
     },
 
     findAll: async () => {
-        const result = await database.raw('SElECT * FROM sessions;');
-        console.log(result.rows.map(row => new Session(row)));
-        return result.rows.map(row => new Session(row));
+            const result = await database.raw('SELECT * from sessions;');
+            console.log(result.rows)
+            return result.rows.map(row => new Session(row));
         }
 };
 

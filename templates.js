@@ -65,8 +65,7 @@ const renderDropdownOptions = (session) => {
     return session.getSessionDropdownOption();
 }
 
-export const renderPage = () => {
-    const sessions = sessionRepository.findAll();
+export const renderPage = (sessions) => {
     const renderedSessions = sessions.map(session => renderSession(session)).join('');
     const renderedDropdownOptions = sessions.map(session => renderDropdownOptions(session)).join('');
     const noSessions = sessions.length === 0;
