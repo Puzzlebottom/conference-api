@@ -8,8 +8,6 @@ import { Talk } from "./Talk.js"
 import knexfile from "./knexfile.js";
 import knex from "knex";
 import { talkRepository } from "./talkRepository.js";
-const config = knexfile[process.env.NODE_ENV || "development"];
-export const database = knex(config);
 
 const app = express();
 
@@ -21,25 +19,22 @@ app.listen(port);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
-// app.use(loggerMiddleware);
+app.use(loggerMiddleware);
 
 app.get('/', (req, res) => {
-    res.send(renderPage());
+    res.send(renderPage(sessionRepository.findAll()));
 });
 
 app.post('/sessions', (req, res) => {
-    // const session = new Session(req.body);
-    sessionRepository.save(req.body)
+    const session = new Session(req.body);
+    sessionRepository.save(session);
     res.redirect('/');
 });
 
-app.post('/talks', (req, res) => {
-    // const talk = new Talk(req.body);
-    talkRepository.save(req.body);
+app.post('/talks', async (req, res) => {
+    const talk = new Talk(req.body);
+    await talkRepository.save(talk._sessionId, talk);
     res.redirect('/');
 });
 
-// const result = (await database.raw(`SELECT * FROM sessions;`)).rows;
-// console.log(result);
-
-
+sessionRepository.save(new Session({title: 'foo', startTime: '10:10'}))
