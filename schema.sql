@@ -27,7 +27,7 @@ SET default_table_access_method = heap;
 CREATE TABLE public.sessions (
     id integer NOT NULL,
     title text,
-    starttime text
+    "startTime" text
 );
 
 
@@ -63,7 +63,7 @@ CREATE TABLE public.talks (
     id integer NOT NULL,
     title text,
     duration integer,
-    sessionid integer
+    "sessionId" integer
 );
 
 
