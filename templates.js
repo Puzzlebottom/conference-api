@@ -1,4 +1,5 @@
 import { talkRepository } from "./talkRepository.js";
+import {sessionRepository} from "./sessionRepository.js";
 
 const pageTemplate = `<!DOCTYPE html>
 <html lang="en">
@@ -41,36 +42,47 @@ const sessionTemplate = `<section class="session">
     <h3>Duration: %duration%</h3>
 </section>`;
 
-const renderSession = (session) => {
-    const noTalks = talkRepository.findAllBySessionId(session._id).length === 0;
-    const duration = noTalks ? '' : session.formatDurationIntoHoursAndMinutes();
-    const talks = noTalks ? '' : formatTalksIntoTemplate(talkRepository.findAllBySessionId(session._id));
-
-    return sessionTemplate.replace('%title%', session.getSessionTitle())
-        .replace('%duration%', duration)
-        .replace('%talk%', talks);
-}
-
-const formatTalksIntoTemplate = (talks) => {
+export const formatTalksIntoTemplate = async (talks) => {
     const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
-    const mapTalksToTemplate = (talk) => {
-        return talkTemplate.replace('%timeOfTalk%', '' + talk.getTalkStartTime())
-            .replace('%title%', talk.getTitle() + ' ' + talk.getDuration() + 'm');
-    };
-    return talks.map(talk => mapTalksToTemplate(talk)).join('')
+    let result = '';
+    for await (const talk of talks) {
+        const duration = await talk.getDuration();
+        const title = await talk.getTitle();
+        const startTime = await talk.getTalkStartTime();
+        result += talkTemplate.replace('%timeOfTalk%', '' + startTime)
+            .replace('%title%', title + ' ' + duration + ' m');
+
+    }
+    return result;
 }
+//
+// export const renderSession = async (session) => {
+//     const noTalks = await talkRepository.findAllBySessionId(session._id).length === 0;
+//     const duration = noTalks ? '' : await session.formatDurationIntoHoursAndMinutes();
+//     const talks = noTalks ? '' : formatTalksIntoTemplate(await talkRepository.findAllBySessionId(session._id));
+//
+//     return sessionTemplate.replace('%title%', session.getSessionTitle())
+//         .replace('%duration%', duration)
+//         .replace('%talk%', talks);
+// }
 
 const renderDropdownOptions = (session) => {
     return session.getSessionDropdownOption();
 }
 
-export const renderPage = (sessions) => {
-    const renderedSessions = sessions.map(session => renderSession(session)).join('');
-    const renderedDropdownOptions = sessions.map(session => renderDropdownOptions(session)).join('');
-    const noSessions = sessions.length === 0;
-    const session = noSessions ? '' : renderedSessions;
-    const options = noSessions ? '' : renderedDropdownOptions;
+// export const renderPage = async () => {
+//     const allSessions = await sessionRepository.findAll();
+//     const renderedSessions = await allSessions.map(session => renderSession(session));
+//         }
 
-        return pageTemplate.replace('%sessions%', session)
-            .replace('%options%', options)
-}
+
+
+    // const renderedSessions = sessions.map(session => renderSession(session)).join('');
+    // const renderedDropdownOptions = sessions.map(session => renderDropdownOptions(session)).join('');
+    // const noSessions = sessions.length === 0;
+    // const session = noSessions ? '' : renderedSessions;
+    // const options = noSessions ? '' : renderedDropdownOptions;
+    //
+    //     return pageTemplate.replace('%sessions%', session)
+    //         .replace('%options%', options)
+

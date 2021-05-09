@@ -1,4 +1,5 @@
-const sessions = [];
+import {database} from "./database.js";
+import {Session} from "./Session.js";
 
 const getIndexById = (searchId) => {
     for(let i = 0; i < sessions.length; i += 1) {
@@ -9,15 +10,21 @@ const getIndexById = (searchId) => {
 }
 
 export const sessionRepository = {
-    save: (session) => {
-        sessions.push(session);
+    save: async (newSessionData) => {
+        await database.raw(`INSERT INTO sessions VALUES (DEFAULT, ?, ?)`, [newSessionData[0].title, newSessionData[0].startTime]);
     },
 
-    findById: (sessionId) => {
-        return sessions[getIndexById(sessionId)];
+    findSessionById: async (sessionId) => {
+        const query = await database.raw(`SELECT * FROM sessions WHERE id = ?`, [sessionId]);
+        const rows = await query.rows;
+        const session = await rows.map(session => new Session(session));
+        return session;
     },
 
-    findAll: () => {
+    findAll: async () => {
+        const query = await database.raw(`SELECT * FROM sessions`);
+        const rows = await query.rows;
+        const sessions = await rows.map(session => new Session(session));
         return sessions;
     }
 };

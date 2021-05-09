@@ -1,32 +1,16 @@
-import { v4 as uuidv4 } from 'uuid';
 import { talkRepository } from "./talkRepository.js";
-
-export const getTotalDurationOfTalks = (sessionId) => {
-    const talks = talkRepository.findAllBySessionId(sessionId);
-    const getDuration = (talk) => {
-        return talk._duration
-    };
-    const durations = talks.map(getDuration);
-    return durations.reduce((a, b) => a + b, 0);
-}
-
-let monotionicallyIncreasingIntValue = 0;
-const monotionicallyIncreasingInt = () => {
-    monotionicallyIncreasingIntValue += 1;
-    return monotionicallyIncreasingIntValue;
-}
-
+import {database} from "./database.js";
 
 export class Session {
+    _id;
     _title;
     _sessionStartTime;
-    _id;
     _dropdown;
 
     constructor(newSessionData) {
+        this._id = newSessionData.id;
         this._title = newSessionData.title; //add a check to see if the name already exists.  append a bracketed counter to duplicate names
         this._sessionStartTime = newSessionData.startTime;
-        this._id = monotionicallyIncreasingIntValue;
         this._dropdown = this.formatDropDownTemplate();
     }
 
@@ -38,8 +22,14 @@ export class Session {
         return this._sessionStartTime;
     }
 
-    formatDurationIntoHoursAndMinutes() {
-        const duration = getTotalDurationOfTalks(this._id);
+    async sumDurationOfTalks() {
+        const query = await database.raw(`SELECT SUM(duration) FROM talks WHERE "sessionId" = ?`, [this._id]);
+        const rows = await query.rows;
+        return parseInt(rows[0].sum);
+    }
+
+    async formatDurationIntoHoursAndMinutes() {
+        const duration = await this.sumDurationOfTalks();
         if(duration < 60) {
             return duration + ' min';
         } else {

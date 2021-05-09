@@ -1,24 +1,15 @@
 import {database} from "./database.js"
-
-const talks = {};
+import {Talk} from "./Talk.js";
 
 export const talkRepository = {
-    save: async (sessionId, talk) => {
-        const formatTalkToDatabase = () => {
-            const template = `INSERT INTO talks VALUES (DEFAULT, '%title%', '%duration%', '%sessionId%');`
-            return template.replace('%title%', talk.getTitle())
-              .replace('%duration%', talk.getDuration())
-              .replace('%sessionId%', talk.getSessionId());
-        }
-
-        await database.raw(formatTalkToDatabase());
-
-        talks[sessionId] = talks[sessionId] || [];
-        talks[sessionId].push(talk);
+    save: async (newTalkData) => {
+        await database.raw(`INSERT INTO talks VALUES (DEFAULT, ?, ?, ?)`, [newTalkData[0].title, newTalkData[0].duration, newTalkData[0].sessionId]);
     },
 
-    findAllBySessionId: (sessionId) => {
-        talks[sessionId] = talks[sessionId] || [];
-        return talks[sessionId];
+    findAllBySessionId: async (sessionId) => {
+        const query = await database.raw(`SELECT * FROM talks WHERE "sessionId" = ?`, [sessionId]);
+        const rows = await query.rows;
+        const talks = await rows.map(talk => new Talk(talk));
+        return talks;
     }
 }
