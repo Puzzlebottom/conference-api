@@ -42,7 +42,7 @@ const sessionTemplate = `<section class="session">
     <h3>Duration: %duration%</h3>
 </section>`;
 
-export const formatTalksIntoTemplate = async (talks) => {
+export const renderTalks = async (talks) => {
     const talkTemplate = `<li><span>%timeOfTalk%</span>%title%</li>`;
     let result = '';
     for await (const talk of talks) {
@@ -60,7 +60,7 @@ export const renderSession = async (session) => {
     const allTalks = await talkRepository.findAllBySessionId(id);
     const noTalks = await allTalks.length === 0;
     const duration = noTalks ? '' : await session.formatDurationIntoHoursAndMinutes();
-    const talks = noTalks ? '' : await formatTalksIntoTemplate(allTalks);
+    const talks = noTalks ? '' : await renderTalks(allTalks);
     return sessionTemplate.replace('%title%', session.getSessionTitle())
         .replace('%duration%', duration)
         .replace('%talk%', talks);

@@ -1,4 +1,3 @@
-import { talkRepository } from "./talkRepository.js";
 import {database} from "./database.js";
 
 export class Session {
@@ -9,7 +8,7 @@ export class Session {
 
     constructor(newSessionData) {
         this._id = newSessionData.id;
-        this._title = newSessionData.title; //add a check to see if the name already exists.  append a bracketed counter to duplicate names
+        this._title = newSessionData.title;
         this._sessionStartTime = newSessionData.startTime;
         this._dropdown = this.formatDropDownTemplate();
     }

@@ -1,14 +1,6 @@
 import {database} from "./database.js";
 import {Session} from "./Session.js";
 
-const getIndexById = (searchId) => {
-    for(let i = 0; i < sessions.length; i += 1) {
-        if ((sessions[i]._id) === parseInt(searchId)) {
-            return i;
-        }
-    } return 'ERROR'
-}
-
 export const sessionRepository = {
     save: async (newSessionData) => {
         await database.raw(`INSERT INTO sessions VALUES (DEFAULT, ?, ?)`, [newSessionData.title, newSessionData.startTime]);
@@ -28,7 +20,3 @@ export const sessionRepository = {
         return sessions;
     }
 };
-
-export class DatabaseError extends Error {
-
-}

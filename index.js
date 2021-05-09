@@ -29,6 +29,3 @@ app.post('/talks', async (req, res) => {
     await talkRepository.save(req.body);
     await res.redirect('/');
 });
-
-
-//remove the brackets around knex requests.  and solve that error.
