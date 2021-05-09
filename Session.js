@@ -14,8 +14,16 @@ export class Session {
         this._dropdown = this.formatDropDownTemplate();
     }
 
+    getId() {
+        return this._id;
+    }
+
     getSessionTitle() {
         return this._title;
+    }
+
+    getSessionDropdownOption() {
+        return this._dropdown;
     }
 
     getSessionStartTime() {
@@ -35,10 +43,6 @@ export class Session {
         } else {
             return Math.floor(duration/60) + ' h ' + (duration % 60) + ' min'
         }
-    }
-
-    getSessionDropdownOption() {
-        return this._dropdown;
     }
 
     formatDropDownTemplate() {

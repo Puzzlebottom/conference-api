@@ -51,38 +51,36 @@ export const formatTalksIntoTemplate = async (talks) => {
         const startTime = await talk.getTalkStartTime();
         result += talkTemplate.replace('%timeOfTalk%', '' + startTime)
             .replace('%title%', title + ' ' + duration + ' m');
-
     }
     return result;
 }
-//
-// export const renderSession = async (session) => {
-//     const noTalks = await talkRepository.findAllBySessionId(session._id).length === 0;
-//     const duration = noTalks ? '' : await session.formatDurationIntoHoursAndMinutes();
-//     const talks = noTalks ? '' : formatTalksIntoTemplate(await talkRepository.findAllBySessionId(session._id));
-//
-//     return sessionTemplate.replace('%title%', session.getSessionTitle())
-//         .replace('%duration%', duration)
-//         .replace('%talk%', talks);
-// }
 
-const renderDropdownOptions = (session) => {
-    return session.getSessionDropdownOption();
+export const renderSession = async (session) => {
+    const id = await session.getId();
+    const allTalks = await talkRepository.findAllBySessionId(id);
+    const noTalks = await allTalks.length === 0;
+    const duration = noTalks ? '' : await session.formatDurationIntoHoursAndMinutes();
+    const talks = noTalks ? '' : await formatTalksIntoTemplate(allTalks);
+    return sessionTemplate.replace('%title%', session.getSessionTitle())
+        .replace('%duration%', duration)
+        .replace('%talk%', talks);
 }
 
-// export const renderPage = async () => {
-//     const allSessions = await sessionRepository.findAll();
-//     const renderedSessions = await allSessions.map(session => renderSession(session));
-//         }
+export const renderPage = async () => {
+    const allSessions = await sessionRepository.findAll();
+    const noSessions = await allSessions.length === 0;
+    let renderedSessions = '';
+    let renderedDropdownOptions = '';
+    for await (const session of allSessions) {
+        const renderedSession = await renderSession(session);
+        const renderedDropdownOption = await session.getSessionDropdownOption();
+        renderedSessions += renderedSession;
+        renderedDropdownOptions += renderedDropdownOption;
+    }
+    const compiledSessions = noSessions ? '' : renderedSessions;
+    const compiledOptions = noSessions ? '' : renderedDropdownOptions;
+    return pageTemplate.replace('%sessions%', compiledSessions)
+        .replace('%options%', compiledOptions);
+}
 
-
-
-    // const renderedSessions = sessions.map(session => renderSession(session)).join('');
-    // const renderedDropdownOptions = sessions.map(session => renderDropdownOptions(session)).join('');
-    // const noSessions = sessions.length === 0;
-    // const session = noSessions ? '' : renderedSessions;
-    // const options = noSessions ? '' : renderedDropdownOptions;
-    //
-    //     return pageTemplate.replace('%sessions%', session)
-    //         .replace('%options%', options)
 

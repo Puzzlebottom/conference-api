@@ -17,15 +17,18 @@ app.use(express.static('public'));
 app.use(loggerMiddleware);
 
 app.get('/', async (req, res) => {
-    res.send(await renderPage());
+    await res.send(await renderPage());
 });
 
 app.post('/sessions', async (req, res) => {
     await sessionRepository.save(req.body);
-    res.redirect('/');
+    await res.redirect('/');
 });
 
 app.post('/talks', async (req, res) => {
     await talkRepository.save(req.body);
-    res.redirect('/');
+    await res.redirect('/');
 });
+
+
+//remove the brackets around knex requests.  and solve that error.

@@ -3,11 +3,11 @@ import {Talk} from "./Talk.js";
 
 export const talkRepository = {
     save: async (newTalkData) => {
-        await database.raw(`INSERT INTO talks VALUES (DEFAULT, ?, ?, ?)`, [newTalkData[0].title, newTalkData[0].duration, newTalkData[0].sessionId]);
+        await database.raw(`INSERT INTO talks VALUES (DEFAULT, ?, ?, ?)`, [newTalkData.title, newTalkData.duration, newTalkData.sessionId]);
     },
 
-    findAllBySessionId: async (sessionId) => {
-        const query = await database.raw(`SELECT * FROM talks WHERE "sessionId" = ?`, [sessionId]);
+    findAllBySessionId: async (id) => {
+        const query = await database.raw(`SELECT * FROM talks WHERE "sessionId" = ?`, [id]);
         const rows = await query.rows;
         const talks = await rows.map(talk => new Talk(talk));
         return talks;

@@ -11,7 +11,7 @@ const getIndexById = (searchId) => {
 
 export const sessionRepository = {
     save: async (newSessionData) => {
-        await database.raw(`INSERT INTO sessions VALUES (DEFAULT, ?, ?)`, [newSessionData[0].title, newSessionData[0].startTime]);
+        await database.raw(`INSERT INTO sessions VALUES (DEFAULT, ?, ?)`, [newSessionData.title, newSessionData.startTime]);
     },
 
     findSessionById: async (sessionId) => {
