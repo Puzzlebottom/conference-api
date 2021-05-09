@@ -32,12 +32,12 @@ export class Talk {
 
     async getTalkStartTime() {
         const sumDurationOfPriorTalks = async () => {
-            const query = await database.raw(`SELECT SUM(duration) FROM talks WHERE id < ?`, [this.getId()]);
+            const query = await database.raw(`SELECT SUM(duration) FROM talks WHERE id < ? AND "sessionId" = ?`, [this.getId(), this.getSessionId()]);
             const rows = await query.rows;
             return parseInt(rows[0].sum);
         }
         const sessionStartTime = async () => {
-            const query = await database.raw(`SELECT * FROM sessions WHERE id = ?`, [await this.getSessionId()]);
+            const query = await database.raw(`SELECT * FROM sessions WHERE id = ?`, [this.getSessionId()]);
             const rows = await query.rows;
             return rows[0].startTime;
         }
