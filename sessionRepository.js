@@ -9,14 +9,12 @@ export const sessionRepository = {
     findSessionById: async (sessionId) => {
         const query = await database.raw(`SELECT * FROM sessions WHERE id = ?`, [sessionId]);
         const rows = await query.rows;
-        const session = await rows.map(session => new Session(session));
-        return session;
+        return await rows.map(session => new Session(session));
     },
 
     findAll: async () => {
         const query = await database.raw(`SELECT * FROM sessions`);
         const rows = await query.rows;
-        const sessions = await rows.map(session => new Session(session));
-        return sessions;
+        return await rows.map(session => new Session(session));
     }
 };

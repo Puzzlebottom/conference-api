@@ -9,7 +9,6 @@ export const talkRepository = {
     findAllBySessionId: async (id) => {
         const query = await database.raw(`SELECT * FROM talks WHERE "sessionId" = ?`, [id]);
         const rows = await query.rows;
-        const talks = await rows.map(talk => new Talk(talk));
-        return talks;
+        return await rows.map(talk => new Talk(talk));
     }
 }
