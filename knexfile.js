@@ -35,7 +35,7 @@ export default {
     },
     migrations: {
       tableName: './data/migrations',
-    }
+    },
     seeds: { directory: './data/seeds' },
   }
 
