@@ -11,7 +11,7 @@ export default {
     client: 'postgresql',
     connection: {
       database: 'my_db',
-      user:     'username',
+      user: 'username',
       password: 'password'
     },
     pool: {
@@ -27,16 +27,12 @@ export default {
     client: 'pg',
     connection: {
       connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
+      ssl: {rejectUnauthorized: false},
     },
     pool: {
       min: 2,
       max: 10
-    },
-    migrations: {
-      tableName: './data/migrations',
-    },
-    seeds: { directory: './data/seeds' },
+    }
   }
+}
 
-};
