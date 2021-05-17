@@ -8,20 +8,21 @@ class Container extends React.Component {
     };
 
     addSession(title, startTime) {
-        const newSession = {title, startTime}
+        const newSession = {title: title, startTime: startTime};
         this.setState({
-            sessions: this.state.sessions.push(newSession)
-        })
+            sessions: [...this.state.sessions, newSession]
+        });
     };
 
     render() {
+        this.addSession("banana", "12:00 am");
         const sessions = this.state.sessions.map(i => <Session title={i.title} startTime={i.startTime}/>);
         return (
             <div>
                 <div className={"sessions-wrapper"}>
                     {this.state.sessions.length > 0 && sessions}
                 </div>
-                <NewSessionForm addSession={this.addSession}/>
+                {/*<NewSessionForm addSession={this.addSession}/>*/}
                 <NewTalkForm />
             </div>
         );
@@ -34,7 +35,8 @@ class Session extends React.Component {
         this.state = {
             id: '',
             title: props.title,
-            startTime: props.startTime
+            startTime: props.startTime,
+            talks: []
         }
     }
     render() {
@@ -83,10 +85,11 @@ class NewSessionForm extends React.Component {
         this.setState({startTime: event.target.value});
     }
 
-    handleSubmit(event) {
+    handleSubmit() {
         this.props.addSession(this.state.title, this.state.startTime)
         // event.preventDefault();
     }
+
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
