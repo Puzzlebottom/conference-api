@@ -17,6 +17,8 @@ app.use(express.static('public'));
 app.use('/scripts/react', express.static('node_modules/react/umd'));
 app.use('/scripts/react-dom', express.static('node_modules/react-dom/umd'));
 app.use('/scripts/babel-standalone', express.static('node_modules/babel-standalone'));
+app.use('/scripts/moment', express.static('node_modules/moment'));
+app.use('/scripts/uuid', express.static('node_modules/uuid/dist/umd'));
 app.use(loggerMiddleware);
 
 app.get('/', async (req, res) => {
