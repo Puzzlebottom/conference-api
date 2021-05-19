@@ -21,11 +21,8 @@ class Container extends React.Component {
     const session = this.state.sessions.filter(function(i) {return i.id === sessionId});
     session[0].talks = [...session[0].talks, newTalk];
     const index = this.state.sessions.findIndex(function(i) {return i.id === sessionId});
-    const updateSessions = () => {
-      const oldSessions = this.state.sessions
-      const updatedSessions = oldSessions.conca //I'm working here now
-    }
-
+    const updatedSessions = this.state.sessions
+    updatedSessions.splice(index, 1, session[0])
     this.setState({
       sessions: updatedSessions
     })
@@ -44,9 +41,7 @@ class Container extends React.Component {
       <div>
         {this.state.sessions.length > 0 && <div className={"sessions-wrapper"}>{sessions}</div>}
         <NewSessionForm addSession={this.addSession}/>
-        <NewTalkForm
-          addTalk={this.addTalk}
-          sessions={this.state.sessions}/>
+        <NewTalkForm addTalk={this.addTalk} sessions={this.state.sessions}/>
       </div>
     );
   };
@@ -60,7 +55,7 @@ class Session extends React.Component {
       title: props.title,
       startTime: props.startTime,
       duration: '',
-      talks: []
+      talks: props.talks
     }
     this.assignTalkStartTime = this.assignTalkStartTime.bind(this)
   }
@@ -186,18 +181,11 @@ class NewTalkForm extends React.Component {
     this.setState({sessionId: event.target.value});
   }
 
-  componentDidUpdate(prevProps) {
-    if(this.props.sessions.length === 1 && this.props.sessions !== prevProps.sessions) {
-      this.setState({
-        sessionId: this.props.sessions[0].id
-      })
-    }
-  }
-
   handleSubmit(event) {
     event.preventDefault();
     const id = uuidv4();
-    this.props.addTalk(id, this.state.title, this.state.duration, this.state.sessionId);
+    const sessionId = this.state.sessionId.length === 0 ? this.props.sessions[0].id : this.state.sessionId;
+    this.props.addTalk(id, this.state.title, this.state.duration, sessionId);
     this.setState({
       title: '',
       duration: ''
