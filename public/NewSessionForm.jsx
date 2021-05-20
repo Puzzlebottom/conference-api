@@ -5,17 +5,12 @@ class NewSessionForm extends React.Component {
       title: '',
       startTime: ''
     }
-    this.handleChangeTitle = this.handleChangeTitle.bind(this);
-    this.handleChangeStartTime = this.handleChangeStartTime.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChangeTitle(event) {
-    this.setState({title: event.target.value});
-  }
-
-  handleChangeStartTime(event) {
-    this.setState({startTime: event.target.value});
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value});
   }
 
   handleSubmit(event) {
@@ -32,8 +27,8 @@ class NewSessionForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <h4>Add new session</h4>
-        <label>Title: <input type="text" value={this.state.title} onChange={this.handleChangeTitle}/></label>
-        <label>Start time: <input type="time" value={this.state.startTime} onChange={this.handleChangeStartTime}/></label>
+        <label>Title: <input type="text" name="title" value={this.state.title} onChange={this.handleChange}/></label>
+        <label>Start time: <input type="time" name="startTime" value={this.state.startTime} onChange={this.handleChange}/></label>
         <input type="submit" value="Add"/>
       </form>
     );

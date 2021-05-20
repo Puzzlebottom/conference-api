@@ -12,19 +12,16 @@ class Container extends React.Component {
   };
 
   addSession(id, title, startTime) {
-    const newSession = {id: id, title: title, startTime: startTime, talks: []};
-    let sessions = [...this.state.sessions, newSession];
-    this.setState({
-      sessions: sessions
-    });
+    const newSession = {id, title, startTime, talks: []};
+    const sessions = [...this.state.sessions, newSession];
+    this.setState({sessions});
   };
 
   addTalk(id, title, duration, sessionId) {
-    const newTalk = {id: id, title: title, duration: duration, sessionId: sessionId};
-    let talks = [...this.state.talks, newTalk];
-    this.setState({
-      talks: talks
-    });
+    duration = parseInt(duration);
+    const newTalk = {id, title, duration, sessionId};
+    const talks = [...this.state.talks, newTalk];
+    this.setState({talks});
   };
 
   assignTalks(sessionId) {
@@ -39,14 +36,12 @@ class Container extends React.Component {
   }
 
   render() {
-    const sessions = this.state.sessions.map(i =>
+    const sessions = this.state.sessions.map(session =>
       <Session
-        key={i.id}
-        id={i.id}
-        title={i.title}
-        startTime={i.startTime}
-        duration={this.sumDurationOfTalks(i.id)}
-        talks={this.assignTalks(i.id)}
+        {...session}
+        key={session.id}
+        duration={this.sumDurationOfTalks(session.id)}
+        talks={this.assignTalks(session.id)}
       />);
     return (
       <div>

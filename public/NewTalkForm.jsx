@@ -6,22 +6,11 @@ class NewTalkForm extends React.Component {
       duration:'',
       sessionId: '',
     }
-    this.handleChangeTitle = this.handleChangeTitle.bind(this);
-    this.handleChangeDuration = this.handleChangeDuration.bind(this);
-    this.handleChangeSession = this.handleChangeSession.bind(this);
+    this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
-  handleChangeTitle(event) {
-    this.setState({title: event.target.value});
-  }
-
-  handleChangeDuration(event) {
-    this.setState({duration: parseInt(event.target.value)});
-  }
-
-  handleChangeSession(event) {
-    this.setState({sessionId: event.target.value});
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value})
   }
 
   handleSubmit(event) {
@@ -40,9 +29,9 @@ class NewTalkForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <h4>Add new talk</h4>
-        <label>Title: <input type="text" value={this.state.title} onChange={this.handleChangeTitle}/></label>
-        <label>Duration: <input type="number" value={this.state.duration} onChange={this.handleChangeDuration}/></label>
-        <label>Session: <select value={this.state.sessionId} onChange={this.handleChangeSession}>
+        <label>Title: <input type="text" name="title" value={this.state.title} onChange={this.handleChange}/></label>
+        <label>Duration: <input type="number" name="duration" value={this.state.duration} onChange={this.handleChange}/></label>
+        <label>Session: <select name="sessionId" value={this.state.sessionId} onChange={this.handleChange}>
           {dropdownOptions}
         </select></label>
         <input type="submit" value="Add"/>

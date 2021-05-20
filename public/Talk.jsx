@@ -3,17 +3,14 @@ class Talk extends React.Component {
     super(props);
     this.state = {
       id: props.id,
-      startTime: props.startTime,
-      title: props.title,
-      duration: props.duration,
     }
   }
 
   render() {
     return (
       <li>
-        <span>{this.state.startTime}</span>
-        {this.state.title} {this.state.duration}  min
+        <span>{this.props.startTime}</span>
+        {this.props.title} {this.props.duration}  min
       </li>
     );
   };
