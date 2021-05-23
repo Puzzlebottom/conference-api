@@ -11,7 +11,7 @@ class Session extends React.Component {
     const index = talks.findIndex(talk => talk.id === talkId);
     let sumOfPriorDurations = 0;
     talks.slice(0, index).map(talk => sumOfPriorDurations += talk.duration);
-    return moment(sessionStartTime).add(sumOfPriorDurations, 'minutes').format('h:mm a');
+    return sessionStartTime.add(sumOfPriorDurations, 'minutes').format('h:mm a');
   }
 
   static formatDuration(duration) {

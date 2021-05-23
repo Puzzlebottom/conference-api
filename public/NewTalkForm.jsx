@@ -15,9 +15,8 @@ class NewTalkForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const id = uuidv4();
     const sessionId = this.state.sessionId.length === 0 ? this.props.sessions[0].id : this.state.sessionId;
-    this.props.addTalk(id, this.state.title, this.state.duration, sessionId);
+    this.props.addTalk(this.state.title, this.state.duration, sessionId);
     this.setState({
       title: '',
       duration: ''

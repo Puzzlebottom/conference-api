@@ -13,10 +13,12 @@ if (port == null || port == "") {
 }
 app.listen(port);
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 app.use(express.static('public'));
 app.use('/scripts/react', express.static('node_modules/react/umd'));
 app.use('/scripts/react-dom', express.static('node_modules/react-dom/umd'));
 app.use('/scripts/babel-standalone', express.static('node_modules/babel-standalone'));
+app.use('/scripts/axios', express.static('node_modules/axios/dist'));
 app.use('/scripts/moment', express.static('node_modules/moment'));
 app.use('/scripts/uuid', express.static('node_modules/uuid/dist/umd'));
 app.use(loggerMiddleware);
@@ -34,3 +36,21 @@ app.post('/talks', async (req, res) => {
     await talkRepository.save(req.body);
     await res.redirect('/');
 });
+
+app.get('/api/sessions', async (req, res) => {
+    res.send(await sessionRepository.load())
+})
+
+app.get('/api/talks', async (req, res) => {
+    res.send(await talkRepository.load())
+})
+
+app.post('/api/sessions', async (req, res) => {
+    await sessionRepository.save(req.body);
+    await res.redirect('/index-react.html')
+})
+
+app.post('/api/talks', async (req, res) => {
+    await talkRepository.save(req.body);
+    await res.redirect('/index-react.html')
+})

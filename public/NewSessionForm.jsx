@@ -15,8 +15,7 @@ class NewSessionForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const id = uuidv4();
-    this.props.addSession(id, this.state.title, moment.utc(this.state.startTime, 'h:mm a'));
+    this.props.addSession(this.state.title, this.state.startTime);
     this.setState({
       title: '',
       startTime: ''

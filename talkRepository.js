@@ -10,5 +10,10 @@ export const talkRepository = {
         const query = await database.raw(`SELECT * FROM talks WHERE "sessionId" = ?`, [id]);
         const rows = await query.rows;
         return await rows.map(talk => new Talk(talk));
+    },
+
+    load: async () => {
+        const query = await database.raw(`SELECT * FROM talks`);
+        return await query.rows
     }
 }

@@ -11,17 +11,23 @@ class Container extends React.Component {
     this.sumDurationOfTalks = this.sumDurationOfTalks.bind(this)
   };
 
-  addSession(id, title, startTime) {
-    const newSession = {id, title, startTime, talks: []};
-    const sessions = [...this.state.sessions, newSession];
-    this.setState({sessions});
+  async addSession(title, startTime) {
+    const newSession = {title: title, startTime: startTime};
+    await axios.post('/api/sessions', newSession);
+    const sessions = await axios.get('/api/sessions');
+    await this.setState({
+      sessions: sessions.data
+    })
   };
 
-  addTalk(id, title, duration, sessionId) {
+  async addTalk(title, duration, sessionId) {
     duration = parseInt(duration);
-    const newTalk = {id, title, duration, sessionId};
-    const talks = [...this.state.talks, newTalk];
-    this.setState({talks});
+    const newTalk = {title: title, duration: duration, sessionId: sessionId};
+    await axios.post('/api/talks', newTalk);
+    const talks = await axios.get('/api/talks');
+    await this.setState({
+      talks: talks.data
+    })
   };
 
   assignTalks(sessionId) {
@@ -35,11 +41,26 @@ class Container extends React.Component {
     return total;
   }
 
+  formatStartTime(time) {
+    return moment(time, 'h:mm a')
+  }
+
+  async componentDidMount() {
+    const sessions = await axios.get('/api/sessions');
+    const talks = await axios.get('/api/talks');
+    await this.setState({
+      sessions: sessions.data,
+      talks: talks.data
+    })
+  }
+
   render() {
     const sessions = this.state.sessions.map(session =>
       <Session
-        {...session}
         key={session.id}
+        id={session.id}
+        title={session.title}
+        startTime={this.formatStartTime(session.startTime)}
         duration={this.sumDurationOfTalks(session.id)}
         talks={this.assignTalks(session.id)}
       />);

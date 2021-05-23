@@ -16,5 +16,10 @@ export const sessionRepository = {
         const query = await database.raw(`SELECT * FROM sessions`);
         const rows = await query.rows;
         return await rows.map(session => new Session(session));
+    },
+
+    load: async () => {
+        const query = await database.raw(`SELECT * FROM sessions`);
+        return await query.rows;
     }
 };
