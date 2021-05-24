@@ -2,6 +2,7 @@ import {expect} from 'chai'
 import request from "supertest";
 import {app} from "./app.js";
 import {talkRepository} from "./talkRepository.js";
+import {database} from "./database.js"
 
 const expectAction = (action) => ({
   changesCountOf: async (valueAccessor, by) => {
@@ -14,7 +15,11 @@ const expectAction = (action) => ({
 
 const talkCount = async () => (await talkRepository.findAllBySessionId(1)).length;
 
-describe('app', () => {
+describe('app integration', () => {
+  beforeEach(async () => {
+    await database.migrate.latest();
+  });
+
   describe('POST /api/talks', () => {
     it('should save a talk', async () => {
       const saveTalk = () => request(app)
