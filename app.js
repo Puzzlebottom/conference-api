@@ -1,12 +1,13 @@
 import express from "express"
 import bodyParser from "body-parser"
 import {renderPage} from "./templates.js"
-import {loggerMiddleware} from "./loggerMiddleware.js"
 import {sessionRepository} from "./sessionRepository.js";
 import {talkRepository} from "./talkRepository.js";
 import {Talk} from "./Talk.js";
+import morgan from "morgan"
 
 export const app = express();
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
