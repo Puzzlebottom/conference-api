@@ -34,6 +34,10 @@ export class Talk {
         if ( parseInt(this._duration) > 0) {
             return true;
         }
+<<<<<<< HEAD
+=======
+        
+>>>>>>> adds rudimentary testing and validation
         return false;
     }
 
