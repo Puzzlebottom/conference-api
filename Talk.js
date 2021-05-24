@@ -30,6 +30,17 @@ export class Talk {
         return this._sessionId
     }
 
+    isValid() {
+        if ( parseInt(this._duration) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    getValidationError() {
+        return 'sdfsdf'
+    }
+
     async getTalkStartTime() {
         const sumDurationOfPriorTalks = async () => {
             const query = await database.raw(`SELECT SUM(duration) FROM talks WHERE id < ? AND "sessionId" = ?`, [this.getId(), this.getSessionId()]);
