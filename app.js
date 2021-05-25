@@ -1,12 +1,13 @@
 import express from "express"
 import bodyParser from "body-parser"
 import {renderPage} from "./templates.js"
-import {loggerMiddleware} from "./loggerMiddleware.js"
 import {sessionRepository} from "./sessionRepository.js";
 import {talkRepository} from "./talkRepository.js";
 import {Talk} from "./Talk.js";
+import morgan from "morgan"
 
 export const app = express();
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
@@ -17,36 +18,43 @@ app.use('/scripts/babel-standalone', express.static('node_modules/babel-standalo
 app.use('/scripts/axios', express.static('node_modules/axios/dist'));
 app.use('/scripts/moment', express.static('node_modules/moment'));
 app.use('/scripts/uuid', express.static('node_modules/uuid/dist/umd'));
-app.use(loggerMiddleware);
 
-app.get('/', async (req, res) => {
+const wrapAsyncRoute = (controllerFunc) => async (req, res, next) => {
+    try {
+        await controllerFunc(req, res, next)
+    } catch (e) {
+        next(e)
+    }
+}
+
+app.get('/', wrapAsyncRoute(async (req, res) => {
     await res.send(await renderPage());
-});
+}));
 
-app.post('/sessions', async (req, res) => {
+app.post('/sessions', wrapAsyncRoute(async (req, res) => {
     await sessionRepository.save(req.body);
     await res.redirect('/');
-});
+}));
 
-app.post('/talks', async (req, res) => {
+app.post('/talks', wrapAsyncRoute(async (req, res) => {
     await talkRepository.save(req.body);
     await res.redirect('/');
-});
+}));
 
-app.get('/api/sessions', async (req, res) => {
+app.get('/api/sessions', wrapAsyncRoute(async (req, res) => {
     res.send(await sessionRepository.load())
-})
+}));
 
-app.get('/api/talks', async (req, res) => {
+app.get('/api/talks', wrapAsyncRoute(async (req, res) => {
     res.send(await talkRepository.load())
-})
+}));
 
-app.post('/api/sessions', async (req, res) => {
+app.post('/api/sessions', wrapAsyncRoute(async (req, res) => {
     await sessionRepository.save(req.body);
     await res.redirect('/index-react.html')
-})
+}));
 
-app.post('/api/talks', async (req, res) => {
+app.post('/api/talks', wrapAsyncRoute(async (req, res) => {
     const talk = new Talk(req.body);
     if (talk.isValid()) {
       await talkRepository.save(req.body);
@@ -54,4 +62,4 @@ app.post('/api/talks', async (req, res) => {
     } else {
       res.status(400).send({error: talk.getValidationError()});
     }
-})
+}));
