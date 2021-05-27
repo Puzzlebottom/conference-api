@@ -6,10 +6,14 @@ export const talkRepository = {
         await database.raw(`INSERT INTO talks VALUES (DEFAULT, ?, ?, ?)`, [newTalkData.title, newTalkData.duration, newTalkData.sessionId]);
     },
 
+    load: async () => {
+        const query = await database.raw(`SELECT * FROM talks`);
+        return await query.rows
+    },
+
     findAllBySessionId: async (id) => {
         const query = await database.raw(`SELECT * FROM talks WHERE "sessionId" = ?`, [id]);
-        const rows = await query.rows;
-        return await rows.map(talk => new Talk(talk));
+        return query.rows.map(talk => new Talk(talk));
     },
 
     countWhereSessionIdAndTitle: async (sessionId, title) => {
@@ -17,8 +21,12 @@ export const talkRepository = {
         return parseInt(result.rows[0].count);
     },
 
-    load: async () => {
-        const query = await database.raw(`SELECT * FROM talks`);
-        return await query.rows
+    clearTable: async () => {
+        await database.raw('DELETE FROM talks');
+    },
+
+    sumDurationOfPriorTalks: async (talkId, sessionId) => {
+        const query = await database.raw(`SELECT SUM(duration) FROM talks WHERE id < ? AND "sessionId" = ?`, [talkId, sessionId]);
+        return parseInt(query.rows[0].sum)
     }
 }

@@ -20,12 +20,12 @@ class NewTalkForm extends React.Component {
       await this.props.addTalk(this.state.title, this.state.duration, sessionId);
       this.setState({
         title: '',
-        duration: ''
+        duration: '',
+        error: ''
       })
     } catch (e) {
       this.setState({error: e.response.data.error})
     }
-
   }
 
   render() {

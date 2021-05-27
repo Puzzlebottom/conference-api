@@ -6,10 +6,14 @@ export const sessionRepository = {
         await database.raw(`INSERT INTO sessions VALUES (DEFAULT, ?, ?)`, [newSessionData.title, newSessionData.startTime]);
     },
 
+    load: async () => {
+        const query = await database.raw(`SELECT * FROM sessions`);
+        return await query.rows;
+    },
+
     findSessionById: async (sessionId) => {
         const query = await database.raw(`SELECT * FROM sessions WHERE id = ?`, [sessionId]);
-        const rows = await query.rows;
-        return await rows.map(session => new Session(session));
+        return query.rows.map(session => new Session(session));
     },
 
     countDuplicateTitles: async (title) => {
@@ -19,12 +23,20 @@ export const sessionRepository = {
 
     findAll: async () => {
         const query = await database.raw(`SELECT * FROM sessions`);
-        const rows = await query.rows;
-        return await rows.map(session => new Session(session));
+        return query.rows.map(session => new Session(session));
     },
 
-    load: async () => {
-        const query = await database.raw(`SELECT * FROM sessions`);
-        return await query.rows;
+    clearTable: async () => {
+        await database.raw('DELETE FROM sessions');
+    },
+
+    sumDurationOfTalks: async (sessionId) => {
+        const query = await database.raw(`SELECT SUM(duration) FROM talks WHERE "sessionId" = ?`, [sessionId]);
+        return parseInt(query.rows[0].sum)
+    },
+
+    getSessionStartTimeById: async (sessionId) => {
+        const query = await database.raw(`SELECT "startTime" FROM sessions WHERE id = ?`, [sessionId]);
+        return query.rows[0].startTime
     }
 };

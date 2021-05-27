@@ -13,17 +13,18 @@ const expectAction = (action) => ({
     expect(endingValue - initialValue).to.eql(by);
   }
 });
-
+const testSession = {title: 'Test Session', startTime: '9:00 am'};
+const testTalk = {title: 'Test Talk', duration: 60, sessionId: 1}
 const talkCount = async () => (await talkRepository.findAllBySessionId(1)).length;
 const sessionCount = async () => (await sessionRepository.findAll()).length;
 
 describe('app integration', () => {
   beforeEach(async () => {
     await database.migrate.latest();
-    await database.raw('DELETE FROM sessions');
-    await database.raw('DELETE FROM talks');
-    await database.raw(`INSERT INTO sessions VALUES (DEFAULT, 'Test Session', '9:00 am')`);
-    await database.raw(`INSERT INTO talks VALUES (DEFAULT, 'Test Talk', 60, 1)`);
+    await sessionRepository.clearTable();
+    await sessionRepository.save(testSession);
+    await talkRepository.clearTable();
+    await talkRepository.save(testTalk);
   });
 
   describe('POST /api/talks', () => {
@@ -67,7 +68,7 @@ describe('app integration', () => {
   })
 
   describe ('GET /api/talks',() => {
-    it('should return a talk with an id, title, duration and sessionId', () => {
+    xit('should return a talk with an id, title, duration and sessionId', () => {
 
     })
 

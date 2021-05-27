@@ -16,10 +16,11 @@ class NewSessionForm extends React.Component {
   async handleSubmit(event) {
     event.preventDefault();
     try {
-      this.props.addSession(this.state.title, this.state.startTime);
+      await this.props.addSession(this.state.title, this.state.startTime);
       this.setState({
         title: '',
-        startTime: ''
+        startTime: '',
+        error: ''
       })
     } catch (e) {
       this.setState({error: e.response.data.error})

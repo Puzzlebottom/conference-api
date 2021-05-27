@@ -56,7 +56,8 @@ app.post('/api/sessions', wrapAsyncRoute(async (req, res) => {
         await sessionRepository.save(req.body);
         res.send({});
     } else {
-        res.status(400).send({error: session.getValidationError()});
+        res.status(400).send({error: await session.getValidationError()});
+        console.log(await session.getValidationError())
     }
 }));
 
@@ -66,6 +67,6 @@ app.post('/api/talks', wrapAsyncRoute(async (req, res) => {
       await talkRepository.save(req.body);
       res.send({});
     } else {
-      res.status(400).send({error: talk.getValidationError()});
+      res.status(400).send({error: await talk.getValidationError()});
     }
 }));
