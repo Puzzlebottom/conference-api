@@ -12,6 +12,11 @@ export const sessionRepository = {
         return await rows.map(session => new Session(session));
     },
 
+    countDuplicateTitles: async (title) => {
+        const result = await database.raw(`SELECT COUNT(*) FROM sessions WHERE title = ?`, [title]);
+        return parseInt(result.rows[0].count);
+    },
+
     findAll: async () => {
         const query = await database.raw(`SELECT * FROM sessions`);
         const rows = await query.rows;

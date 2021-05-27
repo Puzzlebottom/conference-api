@@ -12,6 +12,11 @@ export const talkRepository = {
         return await rows.map(talk => new Talk(talk));
     },
 
+    countWhereSessionIdAndTitle: async (sessionId, title) => {
+        const result = await database.raw(`SELECT COUNT(*) FROM talks WHERE "sessionId" = ? AND title = ?`, [parseInt(sessionId), title]);
+        return parseInt(result.rows[0].count);
+    },
+
     load: async () => {
         const query = await database.raw(`SELECT * FROM talks`);
         return await query.rows

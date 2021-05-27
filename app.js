@@ -4,6 +4,7 @@ import {renderPage} from "./templates.js"
 import {sessionRepository} from "./sessionRepository.js";
 import {talkRepository} from "./talkRepository.js";
 import {Talk} from "./Talk.js";
+import {Session} from "./Session.js";
 import morgan from "morgan"
 
 export const app = express();
@@ -50,13 +51,18 @@ app.get('/api/talks', wrapAsyncRoute(async (req, res) => {
 }));
 
 app.post('/api/sessions', wrapAsyncRoute(async (req, res) => {
-    await sessionRepository.save(req.body);
-    await res.redirect('/index-react.html')
+    const session = new Session(req.body);
+    if (await session.isValid()) {
+        await sessionRepository.save(req.body);
+        res.send({});
+    } else {
+        res.status(400).send({error: session.getValidationError()});
+    }
 }));
 
 app.post('/api/talks', wrapAsyncRoute(async (req, res) => {
     const talk = new Talk(req.body);
-    if (talk.isValid()) {
+    if (await talk.isValid()) {
       await talkRepository.save(req.body);
       res.send({});
     } else {

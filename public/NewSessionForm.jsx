@@ -13,21 +13,26 @@ class NewSessionForm extends React.Component {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  handleSubmit(event) {
+  async handleSubmit(event) {
     event.preventDefault();
-    this.props.addSession(this.state.title, this.state.startTime);
-    this.setState({
-      title: '',
-      startTime: ''
-    })
+    try {
+      this.props.addSession(this.state.title, this.state.startTime);
+      this.setState({
+        title: '',
+        startTime: ''
+      })
+    } catch (e) {
+      this.setState({error: e.response.data.error})
+    }
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
+        <span>{this.state.error}</span>
         <h4>Add new session</h4>
         <label>Title: <input type="text" name="title" value={this.state.title} onChange={this.handleChange}/></label>
-        <label>Start time: <input type="time" name="startTime" value={this.state.startTime} onChange={this.handleChange}/></label>
+        <label>Start time: <input type="text" name="startTime" value={this.state.startTime} onChange={this.handleChange}/></label>
         <input type="submit" value="Add"/>
       </form>
     );
